@@ -1,0 +1,43 @@
+name: Laravel CI
+
+on:
+  push:
+    branches: ['master']  # Trigger on main branch push
+  pull_request:
+    branches: ['master']  # Trigger on pull requests to main branch
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'  # Adjust PHP version as needed
+
+      - name: Install dependencies
+        run: |
+          cp .env.example .env
+          composer install --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts
+
+      - name: Generate application key
+        run: php artisan key:generate
+
+      - name: Create SQLite database
+        run: |
+          mkdir -p database
+          touch database/database.sqlite
+          php artisan migrate --force --seed  # If migrations are needed
+
+      - name: Run PHPUnit tests
+        env:
+          DB_DATABASE: database/database.sqlite
+        run: vendor/bin/phpunit
+
+      - name: Notify on failure
+        if: failure()
+        run: echo "Tests failed" | mail -s "Laravel Tests Failed" sengenghav@gmail.com
