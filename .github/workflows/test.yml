@@ -2,9 +2,9 @@ name: Laravel CI
 
 on:
   push:
-    branches: ['master']  # Trigger on main branch push
+    branches: [master]  
   pull_request:
-    branches: ['master']  # Trigger on pull requests to main branch
+    branches: [master]  
 
 jobs:
   test:
@@ -17,7 +17,7 @@ jobs:
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '7.4'  # Adjust PHP version as needed
+          php-version: '8.1'  # Update PHP version to 8.1 or higher
 
       - name: Install dependencies
         run: |
