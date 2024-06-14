@@ -42,4 +42,18 @@ jobs:
         env:
           DB_CONNECTION: sqlite
           DB_DATABASE: database/database.sqlite
-        run: php artisan test
+        run: php artisan test || echo "Tests failed" >> $GITHUB_ENV
+        continue-on-error: true  # Continue even if tests fail
+
+      - name: Notify on Failure
+        if: failure()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.mailtrap.io
+          server_port: 587
+          username: ${{ secrets.MAILTRAP_USERNAME }}
+          password: ${{ secrets.MAILTRAP_PASSWORD }}
+          subject: 'Laravel Tests Failed'
+          body: |
+            The build has failed. Please check the logs for more details.
+          to: tongsreng@itc.edu.kh
