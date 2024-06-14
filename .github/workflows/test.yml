@@ -40,4 +40,4 @@ jobs:
 
       - name: Notify on failure
         if: failure()
-        run: echo "Tests failed" | mail -s "Laravel Tests Failed" sengenghav@gmail.com
+        run: echo "Tests failed" | mail -s "Laravel Tests Failed" enghav12@gmail.com
